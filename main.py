@@ -6,7 +6,6 @@ import json
 import urllib.parse
 
 load_dotenv()
-
 class SpotifyFollowChecker:
     def __init__(self):
         self.client_id = os.getenv("CLIENT_ID")
@@ -15,7 +14,7 @@ class SpotifyFollowChecker:
         self.scope = "user-follow-read"
         
     def get_authorization_url(self):
-        params = {
+        values = {
             'client_id': self.client_id,
             'response_type': 'code',
             'redirect_uri': self.redirect_uri,
@@ -23,7 +22,7 @@ class SpotifyFollowChecker:
             'show_dialog': 'true'
         }
         
-        url = "https://accounts.spotify.com/authorize?" + urllib.parse.urlencode(params)
+        url = "https://accounts.spotify.com/authorize?" + urllib.parse.urlencode(values)
         return url
     
     def get_access_token(self, authorization_code):
@@ -56,13 +55,13 @@ class SpotifyFollowChecker:
         headers = {
             "Authorization": f"Bearer {access_token}"
         }
-        params = {
+        values = {
             "type": "user",
             "ids": target_user_id
         }
         
         try:
-            response = requests.get(url, headers=headers, params=params)
+            response = requests.get(url, headers=headers, values=values)
             response.raise_for_status()
             result = response.json()
             return result[0] if result else False
@@ -85,7 +84,6 @@ def get_user_authorization():
     print("4. Adres çubuğundaki URL şöyle görünür:")
     print("   http://127.0.0.1:8888/callback?code=AQC4o2KsB...")
     print("5. 'code=' den sonraki kısmı kopyalayın (& işaretine kadar)")
-    
     auth_code = input("\n6. Authorization code'u yapıştırın: ")
     access_token = checker.get_access_token(auth_code)
     
@@ -99,9 +97,6 @@ def get_user_authorization():
 if __name__ == "__main__":
     print("Spotify Takip Kontrol Uygulaması")
     print("=" * 40)
-    print("Bu uygulama sadece SİZİN takip ettiğiniz kullanıcıları kontrol edebilir.")
-    print("Başka kullanıcıların takip listesi Spotify API'sinde erişilebilir değildir.\n")
-    
     access_token = get_user_authorization()
     
     if access_token:
@@ -115,4 +110,5 @@ if __name__ == "__main__":
         else:
             print("===Bu kullanıcıyı takip etmiyorsunuz===")
     else:
+
         print(False) 
