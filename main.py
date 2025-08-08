@@ -110,5 +110,4 @@ if __name__ == "__main__":
         else:
             print("===Bu kullanıcıyı takip etmiyorsunuz===")
     else:
-
         print(False) 
